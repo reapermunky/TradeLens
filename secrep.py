@@ -64,7 +64,6 @@ def fetch_insider_trades(ticker: str) -> pd.DataFrame:
             all_data.append(row_data)
         return pd.DataFrame(all_data)
     except Exception as e:
-        logging.error(f"Error fetching insider trades for {ticker}: {e}")
         return pd.DataFrame()
 
 @st.cache_data(ttl=3600)
@@ -113,7 +112,7 @@ def generate_analysis_via_gpt(prompt: str, model: str = "gpt-3.5-turbo") -> str:
                 {"role": "user", "content": prompt},
             ]
         )
-        return response.choices[0].message.content.strip()
+        return response["choices"][0]["message"]["content"].strip()
     except Exception as e:
         logging.error(f"Error generating GPT analysis: {e}")
         return f"Error generating GPT analysis: {e}"
