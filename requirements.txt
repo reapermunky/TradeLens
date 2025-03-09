@@ -2,6 +2,6 @@ streamlit
 requests
 pandas
 yfinance
-openai==0.28
+openai
 matplotlib
 beautifulsoup4
