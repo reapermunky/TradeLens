@@ -15,7 +15,7 @@ st.set_page_config(page_title="AI Empowered Investment Toolkit", layout="wide")
 
 # Replace with your own OpenAI API key
 OPENAI_API_KEY = "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"
-openai.api_key = OPENAI_API_KEY
+client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # Title and Description
 st.title("📊 AI Empowered Investment Toolkit")
@@ -105,14 +105,14 @@ def generate_analysis_via_gpt(prompt: str, model: str = "gpt-3.5-turbo") -> str:
     Generate text using OpenAI's GPT model based on a given prompt.
     """
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(  # Corrected method
             model=model,
             messages=[
                 {"role": "system", "content": "You are a financial analyst."},
                 {"role": "user", "content": prompt},
             ]
         )
-        return response["choices"][0]["message"]["content"].strip()
+        return response.choices[0].message.content.strip()  # Corrected response extraction
     except Exception as e:
         logging.error(f"Error generating GPT analysis: {e}")
         return f"Error generating GPT analysis: {e}"
