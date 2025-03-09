@@ -52,9 +52,7 @@ Clone the repository:
 
 git clone https://github.com/reapermunky/TradeLens.git
 
-Navigate to the project directory:
-
-cd AI-Investment-Toolkit
+Navigate to the project directory
 
 Install the required dependencies:
 
