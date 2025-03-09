@@ -21,9 +21,11 @@ openai.api_key = OPENAI_API_KEY
 st.title("📊 AI Empowered Investment Toolkit")
 st.markdown(
     """
-This comprehensive tool retrieves live stock data, insider trading activity, key fundamentals, latest news, and performs AI-driven sentiment & valuation analysis – **instantly**. 
+This comprehensive tool retrieves live stock data, insider trading activity, key fundamentals, latest news, 
+and performs AI-driven sentiment & valuation analysis – **instantly**.
 
-> **Disclaimer**: This app is for *educational* purposes only. It is *not* financial advice. Always do your own research and consult professionals before making investment decisions.
+> **Disclaimer**: This app is for *educational* purposes only. 
+It is *not* financial advice. Always do your own research and consult professionals before making investment decisions.
 """
 )
 
@@ -100,9 +102,12 @@ def fetch_latest_news(ticker: str, max_news: int = 5) -> str:
         return f"Error fetching news: {e}"
 
 @st.cache_data(ttl=3600)
-def generate_analysis_via_gpt(prompt: str, model: str = "gpt-3.5-turbo") -> str:
+def generate_analysis_via_gpt(prompt: str, model: str = "gpt-4o") -> str:
     """
-    Generate text using OpenAI's GPT model based on a given prompt.
+    Generate text using OpenAI's new Chat Completions API.
+    
+    We specify some new parameters from the docs (store, max_completion_tokens, etc.).
+    If you use an o1 or o3-mini model, you can also pass 'reasoning_effort'.
     """
     try:
         response = openai.ChatCompletion.create(
@@ -110,7 +115,14 @@ def generate_analysis_via_gpt(prompt: str, model: str = "gpt-3.5-turbo") -> str:
             messages=[
                 {"role": "system", "content": "You are a financial analyst."},
                 {"role": "user", "content": prompt},
-            ]
+            ],
+            # New parameters you might use (customize as desired):
+            store=False,                  # Do not store, or set True if you want to retrieve later
+            max_completion_tokens=1000,   # Replace old 'max_tokens' with 'max_completion_tokens'
+            temperature=1.0,
+            top_p=1.0,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
         )
         return response["choices"][0]["message"]["content"].strip()
     except Exception as e:
@@ -211,8 +223,7 @@ if ticker:
         if news and "Error" not in news:
             prompt_sentiment = (
                 f"Analyze the following news articles about {ticker} and provide a sentiment "
-                "analysis (bullish, bearish, or neutral) with reasons:\n\n"
-                f"{news}\n\n"
+                f"(bullish, bearish, or neutral) with reasons:\n\n{news}\n\n"
                 "Please summarize how this might affect investor perception."
             )
             sentiment_analysis = generate_analysis_via_gpt(prompt_sentiment)
