@@ -66,7 +66,7 @@ Ensure you have Python installed (Python 3.7 or later is recommended).
 
 Run the Streamlit application:
 
-streamlit run app.py
+streamlit run secrep.py
 
 Open the provided local URL in your browser to access the tool.
 
