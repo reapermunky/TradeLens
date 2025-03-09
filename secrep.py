@@ -14,7 +14,7 @@ import logging
 st.set_page_config(page_title="AI Empowered Investment Toolkit", layout="wide")
 
 # Replace with your own OpenAI API key
-OPENAI_API_KEY = "sk-proj-..."
+OPENAI_API_KEY = "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"
 openai.api_key = OPENAI_API_KEY
 
 # Title and Description
